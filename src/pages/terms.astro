@@ -1,14 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../../site.config';
 ---
 
-<BaseLayout title="Terms of Use" description="Terms for using the Helix Training website." robots="noindex,follow" hideFooterCta>
+<BaseLayout title="Terms of Use" description={`Terms for using the ${site.name} website.`} robots="noindex,follow" hideFooterCta>
   <div class="container prose" style="padding-block: var(--s2)">
     <h1>Terms of use</h1>
-    <!-- SETUP: Kathy reviews. Keep it human. -->
-    <p><em>Last updated: 2026-09-27</em></p>
-    <p>This website is general information about Helix Training and about strength training. It is not medical advice. Talk with your doctor or physical therapist before starting a new exercise program, especially if you have an injury or a medical condition.</p>
-    <p>Membership terms, cancellation rules, and waivers are agreed to when you sign up through PushPress and are separate from these website terms.</p>
-    <p>Content on this site belongs to Helix Training. You're welcome to share links; please ask before republishing articles.</p>
+    <!-- SETUP: Jason reviews. Keep it human. -->
+    <p><em>Last updated: 2026-09-28</em></p>
+    <p>This website is general information about {site.name} and about bike care. It is not a substitute for an in-person inspection. Brakes, frames, carbon parts, and e-bike batteries should be checked by a mechanic who can see the bike, and recalls should be checked with the manufacturer or the U.S. Consumer Product Safety Commission.</p>
+    <p>Prices on this site are for labor and may change. The price we quote when you drop off your bike is the one that counts.</p>
+    <p>Content on this site belongs to {site.name}. You're welcome to share links; please ask before republishing articles.</p>
   </div>
 </BaseLayout>

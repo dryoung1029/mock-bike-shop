@@ -1,37 +1,21 @@
-# Old site URLs (Webflow) → new pages
+# Old site URLs → new pages
 
-Every address the old site had, and where it goes now. `public/_redirects`
-implements this; `/launch` verifies it. Add a line here and there when a page
-moves.
+J's Wheels has **no previous website**, so there is nothing to redirect yet
+and `public/_redirects` has no old-site lines.
+
+If the owner turns out to have an old site (or a Facebook/Squarespace/Shopify
+page with its own addresses that people have bookmarked or that Google has
+indexed):
+
+1. List every old address here, with the new page it should go to.
+2. Add one line per address to `public/_redirects`, in the form
+   `/old-address /new-page/ 301` (301 means "moved for good" — search engines
+   carry the old page's standing over to the new one).
+3. `/launch` checks each one after the switch.
 
 | Old | New |
 |---|---|
-| /blog-helix-training-in-corvallis-or | /blog/ |
-| /blog | /blog/ |
-| /about-helix-training-in-corvallis-or, /about | /about/ |
-| /contact-helix-training-in-corvallis-or, /contact | /contact/ |
-| /schedule-helix-training-in-corvallis-or, /schedule | /schedule/ |
-| /membership-pricing-request | /pricing/ |
-| /membership-cancellation-request, /membership-pause-request | /members/ |
-| /coach-bio-request, /coaches, /careers | /coaches/ |
-| /programs/personal-training | /programs/personal-training/ |
-| /programs/community-strength-classes | /programs/group-strength-classes/ |
-| /programs/strength-plus | /programs/strength-plus/ |
-| /programs/intro-to-strength-training-class | /programs/strong-foundations/ |
-| /programs/drop-in | /programs/drop-in/ |
-| /programs/get-started | /free-class/ |
-| /appointments | /programs/personal-training/ |
-| /locations/corvallis | /contact/ |
-| /challenges-and-events, /hsn-nutrition-page, /recipes | /blog/ |
-| /partners | /about/ |
-| /privacy-policy | /privacy/ |
-| /terms-of-use | /terms/ |
-| /coaches/<name> (each coach page) | /coaches/ |
-| /hsa-fsa | /pricing/ |
-| /events/* | /blog/ |
+| (none) | |
 
-Known problems on the old site that the new one fixes: duplicate pages for
-blog/about/contact/schedule with keyword-stuffed slugs; placeholder "Tab 1/2/3"
-and `#` links in production; a stale "Summer Special" hero CTA; ©2022 footer;
-no Organization/LocalBusiness structured data; homepage citability score 33/100
-(scanned 2026-09-27).
+The same rule applies to pages on this site: renaming a page or article slug
+means adding a line to `public/_redirects` and to this table.

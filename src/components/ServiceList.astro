@@ -1,0 +1,27 @@
+---
+import type { Service } from '../lib/content';
+import { bookingHref } from '../../site.config';
+interface Props {
+  services: Service[];
+}
+const { services } = Astro.props;
+---
+
+<ul class="program-list">
+  {services.map((s) => (
+    <li class="program-row">
+      <div>
+        <h3><a href={`/services/${s.id}/`}>{s.data.name}</a></h3>
+        <span class="who">{s.data.audience}</span>
+      </div>
+      <p>
+        {s.data.tagline}
+        {s.data.price && <><br /><strong>{s.data.price}</strong></>}
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--ghost" href={`/services/${s.id}/`}>Details</a>
+        <a class="btn btn--blue" href={bookingHref()}>{s.data.bookingLabel}</a>
+      </div>
+    </li>
+  ))}
+</ul>

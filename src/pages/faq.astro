@@ -5,6 +5,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import FaqList from '../components/FaqList.astro';
 import { getFaqsFor } from '../lib/content';
 import { crumbs, faqJsonLd } from '../lib/seo';
+import { site, bookingHref } from '../../site.config';
 
 const faqs = await getFaqsFor('faq');
 const items = [{ name: 'FAQ', url: '/faq/' }];
@@ -13,15 +14,15 @@ const jsonLd = [crumbs(items), faqJsonLd(faqs.map((f) => f.data))].filter(Boolea
 
 <BaseLayout
   title="Frequently Asked Questions"
-  description="Answers to the questions people ask before joining Helix Training in Corvallis: what to bring, how long classes are, whether beginners are welcome, memberships, and more."
+  description={`Answers to common questions about ${site.name} in ${site.address.city}: appointments, turnaround times, what prices include, what bikes we work on, and more.`}
   jsonLd={jsonLd}
 >
   <div class="container">
     <Breadcrumbs items={items} />
-    <PageHeader title="Questions? We have answers." lede="Still curious after this? Call, email, or just come to a free class and ask in person." />
+    <PageHeader title="Questions? We have answers." lede="Still curious after this? Call, email, or stop by the shop and ask in person." />
     <div style="max-width: var(--measure)">
       <FaqList faqs={faqs} />
     </div>
-    <p style="margin-top: var(--s2)"><a class="btn btn--primary" href="/free-class/">Try a free class</a></p>
+    <p style="margin-top: var(--s2)"><a class="btn btn--primary" href={bookingHref()}>Book a service</a></p>
   </div>
 </BaseLayout>

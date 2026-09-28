@@ -6,8 +6,8 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { isLive, isStub } from '@jeldon/content-model';
 
 export type Article = CollectionEntry<'articles'>;
-export type Program = CollectionEntry<'programs'>;
-export type Coach = CollectionEntry<'coaches'>;
+export type Service = CollectionEntry<'services'>;
+export type TeamMember = CollectionEntry<'team'>;
 export type Faq = CollectionEntry<'faqs'>;
 
 const includeDrafts = process.env.INCLUDE_DRAFTS === 'true';
@@ -28,13 +28,13 @@ export async function getStubArticles(): Promise<Article[]> {
   return all.filter((a) => isStub(flags(a)));
 }
 
-export async function getPrograms(): Promise<Program[]> {
-  const all = await getCollection('programs');
+export async function getServices(): Promise<Service[]> {
+  const all = await getCollection('services');
   return all.filter((p) => includeDrafts || !p.data.draft).sort((a, b) => a.data.order - b.data.order);
 }
 
-export async function getCoaches(): Promise<Coach[]> {
-  const all = await getCollection('coaches');
+export async function getTeam(): Promise<TeamMember[]> {
+  const all = await getCollection('team');
   return all.filter((c) => includeDrafts || !c.data.draft).sort((a, b) => a.data.order - b.data.order);
 }
 

@@ -1,37 +1,36 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProgramList from '../components/ProgramList.astro';
+import ServiceList from '../components/ServiceList.astro';
 import FaqList from '../components/FaqList.astro';
-import Reviews from '../components/Reviews.astro';
-import { site } from '../../site.config';
-import { getPrograms, getFaqsFor, getPublishedArticles, formatDate } from '../lib/content';
+import { site, bookingHref } from '../../site.config';
+import { getServices, getFaqsFor, getPublishedArticles, formatDate } from '../lib/content';
 import { faqJsonLd } from '../lib/seo';
 
-const programs = await getPrograms();
+const services = await getServices();
 const faqs = await getFaqsFor('home');
 const recent = (await getPublishedArticles()).slice(0, 3);
 const jsonLd = [faqJsonLd(faqs.map((f) => f.data))].filter(Boolean) as Record<string, unknown>[];
+const town = `${site.address.city}, ${site.address.region}`;
 
-const title = 'Strength Training Gym in Corvallis, OR';
-const description =
-  'Helix Training is a small-group strength and personal training gym in Corvallis, Oregon, owned by a Doctor of Physical Therapy. Coached classes for every level. Your first class is free.';
+const title = `Bike Repair & Tune-Ups in ${town}`;
+const description = `${site.name} is a neighborhood bike shop in ${town}: tune-ups, flat repair, overhauls, wheel truing, bike fitting, and e-bike service. Clear prices, and we call before adding anything.`;
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <section class="hero">
     <div class="container hero__inner">
       <div class="hero__copy">
-        <p class="hero__where">Corvallis, Oregon</p>
-        <h1>Get strong with people who actually cheer for you.</h1>
+        <p class="hero__where">{town}</p>
+        <h1>Bring it in rattling. Ride it out smooth.</h1>
         <p class="lede">
-          Small classes. A written plan. Coaches who know your name, and programs designed with a Doctor of Physical Therapy.
-          Way more fun than it should be.
+          Tune-ups, flat fixes, wheel work, fittings, and e-bike service from mechanics who explain what they're doing and why.
+          Clear prices up front. No surprises on the bill.
         </p>
         <div class="btn-row">
-          <a class="btn btn--primary btn--lg" href="/free-class/">Try a free class</a>
-          <a class="btn btn--ghost" href="/programs/">See the programs</a>
+          <a class="btn btn--primary btn--lg" href={bookingHref()}>Book a service</a>
+          <a class="btn btn--ghost" href="/services/">See our services</a>
         </div>
-        <p class="hero__note muted">No experience needed. No long-term commitment required.</p>
+        <p class="hero__note muted">Walk-ins welcome. Flat fixes are usually done while you wait.</p>
       </div>
       {site.heroPhoto.src && (
         <div class="hero__photo">
@@ -44,16 +43,16 @@ const description =
   <section class="section section--tight">
     <div class="container pillars">
       <div>
-        <h2>Supportive community</h2>
-        <p>Everyone knows your name and notices when you're not there. Fitness is a lot easier with people in your corner.</p>
+        <h2>Prices before work</h2>
+        <p>You get a price when you drop off. If we find something else, we call or text first. Nothing is added without your yes.</p>
       </div>
       <div>
-        <h2>Evidence-based programs</h2>
-        <p>Every class follows a progressive plan designed by experts, including a Doctor of Physical Therapy. You get stronger over months, not just tired for an hour.</p>
+        <h2>Every kind of bike</h2>
+        <p>Road, gravel, mountain, commuter, cargo, kids' bikes, and most e-bikes. If it has pedals, bring it by.</p>
       </div>
       <div>
-        <h2>Welcoming to every body</h2>
-        <p>First-timers, busy professionals, people over 50, people coming back from injury. Our doors are open to anyone who wants to be their strongest self.</p>
+        <h2>No judgment</h2>
+        <p>Department-store bike or carbon race machine, first ride or ten-thousandth: you'll get the same straight answers.</p>
       </div>
     </div>
   </section>
@@ -61,46 +60,45 @@ const description =
   <section class="section section--alt">
     <div class="container">
       <div class="section-head">
-        <h2>Every body is unique. Find the program that fits yours.</h2>
-        <p>Five ways to train, one coaching philosophy: learn to move well, lift well, and feel strong for the long haul.</p>
+        <h2>What we do</h2>
+        <p>From a five-minute flat fix to a full rebuild. Every service starts with a look at the bike and an honest estimate.</p>
       </div>
-      <ProgramList programs={programs} />
+      <ServiceList services={services} />
+      <p style="margin-top: var(--s1)"><a href="/pricing/">See the full price list</a></p>
     </div>
   </section>
 
   <section class="section">
     <div class="container split">
       <div>
-        <h2>Getting started is easy</h2>
+        <h2>How a repair works</h2>
         <ol class="steps">
           <li>
-            <h3>Book a free class</h3>
-            <p>Pick a time that works. Your first class is on us — a real workout, scaled to you.</p>
+            <h3>Drop it off</h3>
+            <p>Come by during open hours or book ahead. Tell us what's going on — noises, feelings, and "it just seems off" all count.</p>
           </li>
           <li>
-            <h3>Meet your coach</h3>
-            <p>Come a few minutes early for a quick movement check and a conversation about your history and goals.</p>
+            <h3>Get a price</h3>
+            <p>We look the bike over and give you an estimate and a pickup day before any work starts.</p>
           </li>
           <li>
-            <h3>Take the class</h3>
-            <p>About an hour of coached strength work. You'll leave knowing exactly what we do and whether it's for you.</p>
+            <h3>Ride away</h3>
+            <p>We let you know when it's ready, walk you through what we did, and point out anything to keep an eye on.</p>
           </li>
         </ol>
-        <a class="btn btn--primary" href="/free-class/">Book your free class</a>
+        <a class="btn btn--primary" href={bookingHref()}>Book a service</a>
       </div>
       <div class="quote-block">
         <blockquote>
           <p>
-            We're more than a gym. We're a vibrant, fun-loving community that makes strength training an absolute blast — evidence-based programming, a hearty dose of encouragement, and a lot of laughter. With a Doctor of Physical Therapy at the helm, you get a perspective on fitness you won't find anywhere else.
+            We opened {site.name} to be the shop we always wanted to walk into: straight answers, fair prices, and mechanics who are happy to show you how to fix a flat yourself.
           </p>
         </blockquote>
       </div>
     </div>
   </section>
 
-  <Reviews />
-
-  <section class="section">
+  <section class="section section--alt">
     <div class="container split">
       <div>
         <h2>Questions? We have answers.</h2>
@@ -111,31 +109,33 @@ const description =
         <h2>Find us</h2>
         <p>
           <strong>{site.address.street}, {site.address.city}, {site.address.region} {site.address.postalCode}</strong><br />
-          {site.address.landmark}. Easy to reach from anywhere in Corvallis.
+          {site.address.landmark}.
         </p>
         <p>
-          <a href={site.address.mapsUrl} target="_blank" rel="noopener">Get directions</a> ·{' '}
+          {site.address.mapsUrl && <><a href={site.address.mapsUrl} target="_blank" rel="noopener">Get directions</a> ·{' '}</>}
           <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a>
         </p>
-        <iframe
-          src={site.address.mapsEmbedUrl}
-          width="100%"
-          height="280"
-          style="border:0; border-radius: var(--radius-lg)"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Map to Helix Training"
-        ></iframe>
+        {site.address.mapsEmbedUrl && (
+          <iframe
+            src={site.address.mapsEmbedUrl}
+            width="100%"
+            height="280"
+            style="border:0; border-radius: var(--radius-lg)"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title={`Map to ${site.name}`}
+          ></iframe>
+        )}
       </div>
     </div>
   </section>
 
   {recent.length > 0 && (
-    <section class="section section--alt">
+    <section class="section">
       <div class="container">
         <div class="section-head">
-          <h2>From the coaches</h2>
-          <p>Plain-language answers to the questions we hear on the gym floor.</p>
+          <h2>From the repair stand</h2>
+          <p>Plain-language answers to the questions we hear across the counter.</p>
         </div>
         <ul class="post-list">
           {recent.map((a) => (

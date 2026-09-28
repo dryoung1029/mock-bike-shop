@@ -2,23 +2,18 @@
  * POST /api/contact — the one server route on the site. Runs on Cloudflare
  * Workers. It:
  *   1. validates the form and drops obvious spam (honeypot, optional Turnstile)
- *   2. creates a lead in PushPress (if configured)
- *   3. emails the owner through Brevo (if configured)
- *   4. never stores anything itself
+ *   2. emails the shop through Brevo
+ *   3. never stores anything itself
  *
- * If BOTH PushPress and Brevo are unconfigured it still returns ok:false with a
- * clear message so the visitor is told to call — a silent black hole is the
- * worst outcome for a gym.
+ * If Brevo is unconfigured it returns ok:false with a clear message so the
+ * visitor is told to call — a silent black hole is the worst outcome for a shop.
  */
 import type { APIRoute } from 'astro';
-import { createLead } from '../../lib/pushpress';
 import { site } from '../../../site.config';
 
 export const prerender = false;
 
 interface Env {
-  PUSHPRESS_API_KEY?: string;
-  PUSHPRESS_COMPANY_ID?: string;
   BREVO_API_KEY?: string;
   LEAD_NOTIFY_TO?: string;
   LEAD_NOTIFY_FROM?: string;
@@ -102,33 +97,20 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
     }
   }
 
-  const [firstName, ...rest] = name.split(/\s+/);
-  const lead = await createLead(env, {
-    firstName,
-    lastName: rest.join(' '),
-    email,
-    phone,
-    campaign: `website-${subject.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
-    pageUrl: page ? new URL(page, site.url).toString() : undefined,
-    referer: request.headers.get('referer') ?? undefined,
-  });
-
   const html = `
     <h2>New website message — ${escapeHtml(subject)}</h2>
     <p><strong>${escapeHtml(name)}</strong><br>
     <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>${phone ? `<br>${escapeHtml(phone)}` : ''}</p>
     <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
     <hr>
-    <p style="color:#666;font-size:12px">${lead.ok ? 'Added to PushPress as a lead.' : `Not added to PushPress (${escapeHtml(lead.error ?? 'not configured')}).`}</p>
+    <p style="color:#666;font-size:12px">Sent from ${escapeHtml(new URL(page || '/', site.url).toString())}</p>
   `;
-  const mail = await sendBrevo(env, `[Helix website] ${subject} — ${name}`, html, { email, name });
+  const mail = await sendBrevo(env, `[${site.name} website] ${subject} — ${name}`, html, { email, name });
 
-  if (!lead.ok && !mail.ok) {
-    console.error('[contact] lead failed:', lead.error, '| mail failed:', mail.error);
+  if (!mail.ok) {
+    console.error('[contact] mail failed:', mail.error);
     return respond(503, { ok: false, error: `We couldn't send that just now. Please call ${site.phoneDisplay} or email ${site.email}.` });
   }
-  if (!mail.ok) console.warn('[contact] mail failed:', mail.error);
-  if (!lead.ok) console.warn('[contact] lead failed:', lead.error);
   return respond(200, { ok: true });
 };
 

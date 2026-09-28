@@ -2,7 +2,7 @@
 
 Jeldon (github.com/dryoung1029/jeldon) is the content engine. It was extracted
 from the Body of Health site so a second site could reuse the proven parts. This
-repo is Jeldon's first "local business" consumer.
+repo is a "local business" consumer: a mock bike shop, J's Wheels.
 
 ## What's used, what isn't
 
@@ -16,42 +16,53 @@ repo is Jeldon's first "local business" consumer.
 | `@jeldon/competitive-intel` | Competitor site scanner + gap comparison (`npm run competitors`) | no (PageSpeed key optional) |
 | `@jeldon/cli` | `jeldon validate`, `jeldon doctor`, `jeldon check-geo-floor` | no |
 | `@jeldon/drafting` | API-driven drafting pipeline | **not used** — Claude Code drafts (`/article`) |
-| `@jeldon/aeo-audit` | Asks Perplexity/Claude whether we get cited | not used yet (needs API keys; Jason can run it) |
+| `@jeldon/aeo-audit` | Asks Perplexity/Claude whether we get cited | not used yet (needs API keys; a technical helper can run it) |
 | `@jeldon/amplify`, `media`, `crawler-analytics`, `entity-presence` | newsletter, audio, edge analytics | not used |
 
 ## How the packages got here
 
 `@jeldon/*` isn't on npm yet, so the built `dist/` of each package was copied
 into `vendor/@jeldon/` from commit `54fee58` (2026-07-05) with `file:`
-dependencies in `package.json`. To update: build Jeldon (`pnpm install && pnpm
+dependencies in `package.json`. To update (a job for a technical helper, not the owner): build Jeldon (`pnpm install && pnpm
 build`), copy each package's `dist/` and `package.json` over, and change any
-`"workspace:*"` dependency to `"file:../<name>"`. Once Jason publishes the
-packages, replace the seven `file:` lines with `"^0.1.0"` and delete `vendor/`;
+`"workspace:*"` dependency to `"file:../<name>"`. Once the packages are published
+to npm, replace the seven `file:` lines with `"^0.1.0"` and delete `vendor/`;
 Renovate will then keep them current.
 
 ## The Domain Pack (`jeldon.config.ts`) — fields that matter here
 
-- `brand` — name, canonical URL, tagline, NAP (address/phone), logo, colors.
-  Feeds the LocalBusiness JSON-LD on every page.
-- `authors[0]` — Kathy. `schemaId` is the `@id` every article links to; her
-  `profile` (jobTitle, credential, knowsAbout, alumniOf, memberOf, sameAs)
-  becomes the Person node on `/coaches/`. This is the E-E-A-T signal.
+- `brand` — name, canonical URL, tagline, NAP (address/phone), logo
+  (`/brand/logo.svg`), colors (blue, orange, charcoal). Feeds the
+  LocalBusiness JSON-LD on every page. Address, phone and URL are `SAMPLE:`
+  values until the owner gives real ones; keep them in sync with `site.config.ts`.
+- `authors[0]` — Jason, slug `jason`, Owner & Head Mechanic. `schemaId` is the
+  `@id` every article links to; his `profile` (jobTitle, credential,
+  knowsAbout, alumniOf, memberOf, sameAs) becomes the Person node on `/team/`.
+  This is the E-E-A-T signal. Only list certifications he actually holds.
 - `voice` — persona, banned topics/phrasings, rules, reading band. `/article`
-  injects this. `voiceAnchorUrls`: add 1–2 published articles she says sound
-  like her.
-- `content` — categories (`guide`, `evidence`, `training`, `nutrition`,
+  injects this. Banned topics include promising a repair makes a bike "safe",
+  diagnosing carbon or battery damage from a description, and e-bike limiter
+  or battery mods. `voiceAnchorUrls`: add 1–2 published articles he says
+  sound like him.
+- `content` — categories (`guide`, `maintenance`, `gear`, `riding`,
   `community`), per-category GEO targets, curated tag vocabulary.
 - `scoring` — defaults from Body of Health with two overrides: the citation
-  regex points at fitness/rehab sources (PubMed, DOI, ACSM, NSCA, CDC, APTA…)
-  and the first-person markers are a coach's ("when I coach", "in our gym").
+  regex points at bike and safety sources (CPSC, NHTSA, Park Tool, Sheldon
+  Brown, Shimano, SRAM, League of American Bicyclists, PeopleForBikes, DOI…)
+  and the first-person markers are a mechanic's ("when I overhaul", "in our
+  shop", "we see").
 - `citation.policy: 'direct-source-urls'` — references are real links; the
   lint stays quiet; Claude Code verifies each link by opening it.
 - `aeo.querySet` — the eight questions we want to be the answer to. Used by
   `/reddit-ideas` and `/article` for topic selection; used by `aeo-audit` if
-  Jason ever runs it.
-- `competitors` — roster, target keywords, template fingerprints.
-- `schema` — `orgType` includes `LocalBusiness` and `HealthClub`;
+  someone ever runs it.
+- `competitors` — roster, target keywords, template fingerprints. The roster
+  is empty on purpose: `/competitors` asks the owner which real local shops to
+  watch. Never invent competitor names.
+- `schema` — `orgType` is `Organization`, `LocalBusiness`, `BicycleStore`;
   `emitLlmsTxt: true` with a curated `llmsTxt` block.
+- `compliance.requireHumanReviewTags` — articles tagged brakes, e-bikes,
+  batteries, safety, or kids-bikes always get a careful owner read.
 - `capabilities` — only `competitiveIntel` on. `drafting: false` is
   deliberate (see above).
 - `services.store: 'fs'` — no GitHub-as-database; the repo is the database.
@@ -77,6 +88,9 @@ import('@jeldon/config').then(async ({loadDomainPack})=>{
 no file is named).
 
 ## Notes for the engine (things this build found — for the Jeldon spawn-engine work)
+
+If the engine needs a change, don't edit `vendor/`. Write it up here and hand
+it to whoever maintains Jeldon.
 
 1. **Packages aren't published.** `npm view @jeldon/config` → 404. The
    template's `pnpm install` fails on a fresh clone. Publishing (or `jeldon
@@ -105,7 +119,7 @@ no file is named).
    and `node:fs` into the Worker bundle. Keep server routes free of the Domain
    Pack loader (this repo keeps `site.config.ts` import-free for that reason).
 9. **Competitive-intel scanner** reported "Meta description: MISSING" on a page
-   that has one, and didn't identify the PushPress/Webflow vendor despite
+   that has one, and didn't identify the site vendor despite
    `templateVendors` fingerprints. Worth a test case.
 10. **A doctor for the site kit** (`npm run check:site`) had to be written
     alongside `jeldon doctor`; the engine's doctor only knows the Domain Pack.

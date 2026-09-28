@@ -1,18 +1,18 @@
 /* ==========================================================================
-   Helix Training — design tokens and base styles
-   One typeface (Nunito) in three weights. Blue does the work; red is spent
-   in exactly one place per page: the free-class button and the helix mark.
+   J's Wheels — design tokens and base styles
+   One typeface (Nunito) in three weights. Blue does the work; orange is spent
+   in exactly one place per page: the "Book a Service" button (and the logo).
    ========================================================================== */
 
 :root {
   /* Brand (from the logo) */
-  --blue: #008abd;
-  --blue-deep: #006f98;
-  --blue-tint: #e8f5fb;
-  --red: #ec222d;
-  --red-deep: #c4141e;
-  --salmon: #f08a7a;
-  --charcoal: #333537;
+  --blue: #1f6feb;
+  --blue-deep: #1858c4;
+  --blue-tint: #eaf1fe;
+  /* Button orange is darker than the logo orange (#f25c05) so white text passes WCAG AA. */
+  --orange: #c2410c;
+  --orange-deep: #9a3412;
+  --charcoal: #22262b;
 
   /* Surfaces & text (light) */
   --bg: #ffffff;
@@ -58,9 +58,9 @@
     --fg-muted: #a5abb5;
     --line: #34383d;
     --line-strong: #4a4f56;
-    --blue-tint: #10303d;
-    --blue: #2ba6d9;
-    --blue-deep: #6cc3e8;
+    --blue-tint: #13274a;
+    --blue: #4f8ff7;
+    --blue-deep: #8db8ff;
   }
 }
 :root[data-theme='dark'] {
@@ -71,9 +71,9 @@
   --fg-muted: #a5abb5;
   --line: #34383d;
   --line-strong: #4a4f56;
-  --blue-tint: #10303d;
-  --blue: #2ba6d9;
-  --blue-deep: #6cc3e8;
+  --blue-tint: #13274a;
+  --blue: #4f8ff7;
+  --blue-deep: #8db8ff;
 }
 
 /* ---------- Reset & base ---------- */
@@ -187,8 +187,8 @@ hr {
   background: var(--bg-dark);
   color: var(--fg-on-dark);
 }
-.section--dark a {
-  color: #8fd3f2;
+.section--dark a:not(.btn) {
+  color: #9cc2ff;
 }
 .section-head {
   max-width: var(--measure);
@@ -238,11 +238,11 @@ hr {
   transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 .btn--primary {
-  background: var(--red);
+  background: var(--orange);
   color: #fff;
 }
 .btn--primary:hover {
-  background: var(--red-deep);
+  background: var(--orange-deep);
   color: #fff;
 }
 .btn--blue {
@@ -320,7 +320,7 @@ hr {
   color: var(--blue-deep);
 }
 
-/* ---------- Cards (used sparingly: pricing, coaches) ---------- */
+/* ---------- Cards (used sparingly: pricing, team) ---------- */
 .card {
   background: var(--bg);
   border: 1px solid var(--line);
@@ -343,15 +343,15 @@ hr {
   letter-spacing: 0;
 }
 
-/* ---------- Coach ---------- */
-.coach {
+/* ---------- Team member ---------- */
+.member {
   display: grid;
   grid-template-columns: 5rem 1fr;
   gap: var(--s0);
   align-items: start;
 }
-.coach img,
-.coach .avatar {
+.member img,
+.member .avatar {
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
@@ -363,11 +363,11 @@ hr {
   color: var(--blue-deep);
   font-size: var(--step-1);
 }
-.coach h3 {
+.member h3 {
   font-size: var(--step-1);
   margin-bottom: 0.15em;
 }
-.coach .role {
+.member .role {
   color: var(--fg-muted);
   font-weight: 700;
   font-size: var(--step--1);
@@ -462,7 +462,7 @@ hr {
   margin: var(--s1) 0;
 }
 .notice--warn {
-  border-color: var(--red);
+  border-color: var(--orange);
   background: #fdecec;
   color: #3a1b1b;
 }

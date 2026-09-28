@@ -10,17 +10,17 @@ go in the chat.** They go straight into Cloudflare's secrets page.
 ## Cloudflare (hosting — free)
 
 **Create the account**
-1. cloudflare.com → **Sign up** → your business email + a password. No card.
+1. cloudflare.com → **Sign up** → your shop email + a password. No card.
 2. Confirm the email.
 
 **Connect the website**
 1. Left menu → **Workers & Pages** → **Create** (blue button).
 2. Choose **Import a repository** (under the Workers tab).
 3. **Connect GitHub** → GitHub asks what Cloudflare may see → choose
-   **Only select repositories** → pick `helix-training-site` → **Install & Authorize**.
-4. Back in Cloudflare, click `helix-training-site`.
+   **Only select repositories** → pick `mock-bike-shop` → **Install & Authorize**.
+4. Back in Cloudflare, click `mock-bike-shop`.
 5. On the setup screen:
-   - Project name: `helix-training-site`
+   - Project name: `js-wheels-site`
    - Build command: `npm run build`
    - Deploy command: `npm run deploy:cf`
    - Leave the rest alone.
@@ -33,86 +33,89 @@ later.
 
 **Web Analytics (see how many people visit — no cookies, free)**
 1. Left menu → **Analytics & Logs** → **Web Analytics** → **Add a site**.
-2. Hostname: `helixtrain.com` → **Done**.
+2. Hostname: the shop's real domain (or the `.workers.dev` address until
+   there is one) → **Done**.
 3. It shows a code snippet. Inside it is `"token":"...."`. Copy the long code
    between the quotes and paste it in the chat. (This one isn't secret.)
 
 **Secrets (where API keys go)**
-1. **Workers & Pages** → `helix-training-site` → **Settings** tab.
+1. **Workers & Pages** → `js-wheels-site` → **Settings** tab.
 2. Find **Variables and Secrets** → **Add**.
 3. Type the name exactly as Claude tells you (for example `BREVO_API_KEY`),
    choose **Secret** for keys and **Text** for plain values, paste the value,
    click **Deploy**.
-4. Two of the names (`PUSHPRESS_API_KEY`, `PUSHPRESS_COMPANY_ID`) also need to
-   go under **Settings → Build → Variables and secrets** so the schedule page
-   can read your classes while the site is being built.
+4. The full list the site uses:
+   - `BREVO_API_KEY` — **Secret**
+   - `LEAD_NOTIFY_TO` — **Text** (the inbox that gets contact-form messages)
+   - `LEAD_NOTIFY_FROM` — **Text** (the sender address verified in Brevo)
+   - `TURNSTILE_SECRET_KEY` — **Secret**, optional (spam shield, below)
+
+   None of these are needed while the site is being built, only when someone
+   sends the contact form.
 
 ---
 
 ## Brevo (sends you an email when someone uses the contact form — free)
 
-1. brevo.com → **Sign up free** → business email.
-2. Confirm email. Skip the tour. If it asks about a company website, use
-   helixtrain.com.
+1. brevo.com → **Sign up free** → shop email.
+2. Confirm email. Skip the tour. If it asks about a company website, use the
+   shop's domain (or the `.workers.dev` address for now).
 3. **Senders & IP** (under your name, top right, or Settings) → **Add a sender**
-   → name `Helix Training`, email `website@helixtrain.com` (or any address on
-   your domain you can receive at). Brevo emails a confirmation link to that
-   address; click it. (If you can't receive at your domain yet, use your
-   regular business email as the sender for now.)
+   → name `J's Wheels`, email an address on your domain you can receive at
+   (for example `website@` your domain). Brevo emails a confirmation link to
+   that address; click it. (If you can't receive at your domain yet, use your
+   regular shop email as the sender for now.)
 4. Top right, your name → **SMTP & API** → **API Keys** tab → **Generate a new
-   API key** → name it `helix-website` → **Generate**. Copy it.
+   API key** → name it `js-wheels-website` → **Generate**. Copy it.
 5. Go put it in Cloudflare (see Secrets above) as `BREVO_API_KEY`. Then add two
    Text variables: `LEAD_NOTIFY_TO` = the inbox that should get messages, and
    `LEAD_NOTIFY_FROM` = the sender email you verified in step 3.
+6. Claude then sends a test message through the live form
+   (`npm run test:contact`) and asks you to check that inbox, including spam.
 
 ---
 
-## PushPress API (puts website inquiries into your PushPress leads)
+## Online booking tool (optional)
 
-1. Go to **developer.pushpress.com** and sign in with your normal PushPress login.
-2. Find **API Keys** → **Create key** (or **New API key**) → name it `website`.
-3. PushPress shows you the key **once**, plus your **Company ID** (sometimes
-   called location ID — a short code).
-4. In Cloudflare secrets: `PUSHPRESS_API_KEY` = the key (Secret),
-   `PUSHPRESS_COMPANY_ID` = the ID (Text). Add both in **both** places
-   (Variables and Secrets, and Build → Variables and secrets).
-5. If the developer portal asks you to "enable the Platform API" first, do
-   that; if it says the API isn't available on your plan, tell Claude — the
-   contact form works with Brevo alone, and the schedule page uses the
-   PushPress calendar embed instead.
-
-**Plan links (for the sign-up buttons)**
-PushPress Control Panel → **Plans** → click a plan → **Landing page** / **Share**
-→ copy the link (starts with `https://helixtraining.pushpress.com/landing/plans/`).
-Paste each one in chat when Claude asks.
+Only if the shop already uses one (Square Appointments, Calendly, a
+shop-management system with online drop-off booking…). Open the tool, find its
+**public booking link** or **Share** button, and paste the link in chat (not
+secret). Claude puts it in `site.config.ts → booking.url`, and every
+"Book a Service" button goes straight there. Blank = the buttons go to the
+contact form, which is fine.
 
 ---
 
 ## Google Search Console (Google's report card for the site — free)
 
 1. search.google.com/search-console → sign in with the Google account that
-   owns the gym's Google Business Profile.
-2. If `helixtrain.com` is already listed, you're done for now.
-3. If not: **Add property** → **URL prefix** → `https://helixtrain.com` →
+   owns the shop's Google Business Profile.
+2. If the shop's domain is already listed, you're done for now.
+3. If not: **Add property** → **URL prefix** → `https://` + your domain →
    **HTML tag** method → copy the `content="..."` code → paste it in the chat
    (not secret). Claude puts it in the site; after launch, click **Verify**.
 4. After launch, Claude will ask you to submit the sitemap
-   (`https://helixtrain.com/sitemap-index.xml`) under **Sitemaps**.
+   (`https://` your domain `/sitemap-index.xml`) under **Sitemaps**.
+
+While the site is a mock at `jswheels.example.com`, skip this — Google can't
+verify a made-up domain.
 
 ---
 
 ## Cloudflare Turnstile (optional spam shield on the contact form)
 
 Only if spam becomes a problem. Cloudflare → **Turnstile** → **Add widget** →
-hostname `helixtrain.com` → copy the **Site key** (paste in chat; not secret)
-and put the **Secret key** in Cloudflare secrets as `TURNSTILE_SECRET_KEY`.
-Both must be set together: the site key goes in `site.config.ts →
-contactForm.turnstileSiteKey`; a secret key alone makes every submission fail.
+hostname = your domain (and the `.workers.dev` address) → copy the **Site key**
+(paste in chat; not secret) and put the **Secret key** in Cloudflare secrets as
+`TURNSTILE_SECRET_KEY`. Both must be set together: the site key goes in
+`site.config.ts → contactForm.turnstileSiteKey`; a secret key alone makes every
+submission fail.
 
 ---
 
-## Domain registrar (only during /launch, with Jason)
+## Domain registrar (only during /launch, with a helper)
 
-Where `helixtrain.com` was bought. Jason finds it with a WHOIS lookup. The
-owner logs in; Jason reads which records to change; Claude checks the result.
-Email records are never touched.
+Where the shop's domain was bought (GoDaddy, Namecheap, Squarespace Domains…).
+Claude finds it with a WHOIS lookup. The owner logs in and confirms each
+screen; the technical helper reads which records to change; Claude checks the
+result. Email records are never touched.
