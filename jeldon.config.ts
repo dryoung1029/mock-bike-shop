@@ -58,7 +58,7 @@ export default defineDomainPack({
         ],
         alumniOf: [], // SETUP: mechanic school, if any
         memberOf: [], // SETUP: e.g. a bike advocacy group or trade association
-        sameAs: [], // SETUP: social profiles
+        sameAs: ['https://www.instagram.com/jwheels/', 'https://www.tiktok.com/@jwheels'],
       },
     },
   ],
@@ -223,7 +223,7 @@ export default defineDomainPack({
       name: "J's Wheels",
       url: SITE_URL,
       logoUrl: `${SITE_URL}/brand/logo.svg`,
-      sameAs: [], // SETUP: social profiles
+      sameAs: ['https://www.instagram.com/jwheels/', 'https://www.tiktok.com/@jwheels'],
       // Address and phone come from brand.nap above. `extra` is merged verbatim
       // into the LocalBusiness node.
       extra: {

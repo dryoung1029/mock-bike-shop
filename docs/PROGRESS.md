@@ -8,7 +8,8 @@ The `/setup` wizard's memory. Checked = done. Notes say what the owner skipped o
   - Address and phone: keep the SAMPLE ones for the demo (2026-09-28).
   - Email: dryoung1029@gmail.com, shown publicly on the site and used as LEAD_NOTIFY_TO in Stage 7 (2026-09-28).
   - Hours: keep the SAMPLE hours for the demo (2026-09-28).
-  - Next: social links.
+  - Social: Instagram and TikTok @jwheels; no Facebook, Strava, or YouTube for now (2026-09-28).
+  - Next: Google Business Profile.
 - [ ] Stage 2 — Services and prices
 - [ ] Stage 3 — Team
 - [ ] Stage 4 — His voice

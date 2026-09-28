@@ -49,7 +49,8 @@ export const site = {
 
   social: {
     facebook: '', // SETUP
-    instagram: '', // SETUP
+    instagram: 'https://www.instagram.com/jwheels/', // confirmed by Jason 2026-09-28
+    tiktok: 'https://www.tiktok.com/@jwheels', // confirmed by Jason 2026-09-28
     strava: '', // SETUP (a Strava club link, if the shop runs group rides)
     youtube: '', // SETUP
   },

@@ -5,6 +5,7 @@ interface Props {
 }
 const { hideCta = false } = Astro.props;
 const year = new Date().getFullYear();
+const socialLabels: Record<string, string> = { tiktok: 'TikTok', youtube: 'YouTube' };
 const socials = Object.entries(site.social).filter(([, url]) => url) as [string, string][];
 const days = Object.entries(site.hours) as [string, string][];
 ---
@@ -33,7 +34,7 @@ const days = Object.entries(site.hours) as [string, string][];
         <ul class="social">
           {socials.map(([name, url]) => (
             <li>
-              <a href={url} rel="me noopener" target="_blank">{name.charAt(0).toUpperCase() + name.slice(1)}</a>
+              <a href={url} rel="me noopener" target="_blank">{socialLabels[name] ?? name.charAt(0).toUpperCase() + name.slice(1)}</a>
             </li>
           ))}
         </ul>
