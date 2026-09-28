@@ -19,7 +19,7 @@ export const site = {
   shortPitch: 'A neighborhood bike shop for tune-ups, repairs, wheel work, fittings, and e-bike service.',
   phone: '+1-555-010-0142', // SAMPLE: 555-01xx numbers are reserved for fiction
   phoneDisplay: '(555) 010-0142', // SAMPLE
-  email: 'hello@jswheels.example.com', // SAMPLE
+  email: 'dryoung1029@gmail.com', // confirmed by Jason 2026-09-28 (shown publicly; also the lead inbox)
   address: {
     street: '214 Spoke Street', // SAMPLE
     city: 'Anytown', // SAMPLE
