@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { render } from 'astro:content';
+import { personGraph } from '@jeldon/schema-graph';
+import { getTeam } from '../lib/content';
+import { crumbs } from '../lib/seo';
+import { pack } from '../lib/pack';
+import { site } from '../../site.config';
+
+const team = await getTeam();
+const rendered = await Promise.all(team.map(async (m) => ({ m, Content: (await render(m)).Content })));
+const items = [{ name: 'Team', url: '/team/' }];
+
+// The owner's Person node links every article's author @id (E-E-A-T).
+const owner = pack.authors.find((a) => a.isPrimary) ?? pack.authors[0];
+const ownerNode = personGraph({
+  schemaId: owner.schemaId,
+  profile: owner.profile,
+  siteUrl: pack.brand.siteUrl,
+});
+const initials = (name: string) => name.split(' ').map((w) => w[0]).slice(0, 2).join('');
+---
+
+<BaseLayout
+  title="Our Team"
+  description={`Meet the mechanics at ${site.name} in ${site.address.city} — the people who'll tune, fix, fit, and true your bike.`}
+  jsonLd={[crumbs(items), ownerNode as Record<string, unknown>]}
+>
+  <div class="container">
+    <Breadcrumbs items={items} />
+    <PageHeader
+      title="Meet the team"
+      lede="The people behind the repair stand. Ask any of us anything — no question is too basic."
+    />
+    <div class="grid grid--2" style="gap: var(--s2)">
+      {rendered.map(({ m, Content }) => (
+        <div class="member" id={m.id}>
+          {m.data.photo ? (
+            <img src={m.data.photo} alt={m.data.photoAlt ?? m.data.name} width="80" height="80" loading="lazy" />
+          ) : (
+            <div class="avatar" aria-hidden="true">{initials(m.data.name)}</div>
+          )}
+          <div>
+            <h3>{m.data.name}{m.data.credentials ? `, ${m.data.credentials}` : ''}</h3>
+            <p class="role">{m.data.role}</p>
+            <div class="prose"><Content /></div>
+            {m.data.specialties.length > 0 && (
+              <p>{m.data.specialties.map((s) => <span class="tag">{s}</span>)}</p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+    <section class="section">
+      <h2>Want to wrench here?</h2>
+      <p>We're always glad to hear from mechanics who like explaining things as much as fixing them. <a href="/contact/">Send us a note</a> with a bit about yourself.</p>
+    </section>
+  </div>
+</BaseLayout>

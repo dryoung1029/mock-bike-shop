@@ -7,7 +7,7 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
 <header class="site-header">
   <div class="container site-header__inner">
     <a href="/" class="brand" aria-label={`${site.name} home`}>
-      <img src="/brand/logo-horizontal.webp" alt={site.name} width="220" height="89" />
+      <img src="/brand/logo.svg" alt={site.name} width="220" height="60" />
     </a>
 
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -55,7 +55,7 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
   .brand img {
     width: clamp(150px, 20vw, 210px);
     height: auto;
-    /* The logo file has a white background; keep it on a white plate in dark mode. */
+    /* The logo has dark lettering; keep it on a white plate in dark mode. */
     background: #fff;
     border-radius: 6px;
     padding: 2px 6px;

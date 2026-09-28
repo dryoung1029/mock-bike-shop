@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { site } from '../../site.config';
+import { site, bookingHref } from '../../site.config';
 import { crumbs } from '../lib/seo';
 
 const items = [{ name: 'Contact', url: '/contact/' }];
@@ -10,15 +10,15 @@ const turnstile = site.contactForm.turnstileSiteKey;
 
 <BaseLayout
   title="Contact"
-  description="Contact Helix Training in Corvallis, OR. Ask about classes, personal training, memberships, or book a free class. Call (541) 286-7850 or send a message."
+  description={`Contact ${site.name} in ${site.address.city}, ${site.address.region}. Ask about a repair, a tune-up, a fitting, or a new bike. Call ${site.phoneDisplay} or send a message.`}
   jsonLd={[crumbs(items)]}
 >
   <div class="container">
     <Breadcrumbs items={items} />
     <div class="split" style="padding-block: var(--s1) var(--s3)">
       <div>
-        <h1>Talk to a coach.</h1>
-        <p class="lede">Questions about a program, a membership, or whether this is the right place for you — ask. A real person replies.</p>
+        <h1>Talk to a mechanic.</h1>
+        <p class="lede">Questions about a repair, a price, or which bike to buy — ask. A real person replies.</p>
 
         <form class="form" method="post" action="/api/contact/" id="contact-form" novalidate>
           <div class="field">
@@ -42,7 +42,7 @@ const turnstile = site.contactForm.turnstileSiteKey;
           <div class="field">
             <label for="message">Message</label>
             <textarea id="message" name="message" required maxlength="3000"></textarea>
-            <span class="hint">Please don't include medical details here — we'll talk about your history in person.</span>
+            <span class="hint">Booking a repair? Tell us the kind of bike and what's going on with it.</span>
           </div>
           <div class="hp" aria-hidden="true">
             <label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
@@ -61,23 +61,23 @@ const turnstile = site.contactForm.turnstileSiteKey;
         <p>
           <strong>{site.address.street}</strong><br />
           {site.address.city}, {site.address.region} {site.address.postalCode}<br />
-          {site.address.landmark}.<br />
-          <a href={site.address.mapsUrl} target="_blank" rel="noopener">Get directions</a>
+          {site.address.landmark}.
+          {site.address.mapsUrl && <><br /><a href={site.address.mapsUrl} target="_blank" rel="noopener">Get directions</a></>}
         </p>
         <p>
           <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a><br />
           <a href={`mailto:${site.email}`}>{site.email}</a>
         </p>
-        <p><a class="btn btn--ghost" href="/free-class/">Skip the email — book a free class</a></p>
-        <iframe
+        {site.booking.url && <p><a class="btn btn--ghost" href={bookingHref()}>Skip the email — book online</a></p>}
+        {site.address.mapsEmbedUrl && <iframe
           src={site.address.mapsEmbedUrl}
           width="100%"
           height="260"
           style="border:0; border-radius: var(--radius-lg)"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          title="Map to Helix Training"
-        ></iframe>
+          title={`Map to ${site.name}`}
+        ></iframe>}
       </div>
     </div>
   </div>

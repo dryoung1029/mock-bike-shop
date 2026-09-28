@@ -3,4 +3,5 @@ Allow: /
 Disallow: /api/
 Disallow: /thanks/
 
-Sitemap: https://helixtrain.com/sitemap-index.xml
+# SAMPLE: domain — keep in sync with site.config.ts
+Sitemap: https://jswheels.example.com/sitemap-index.xml

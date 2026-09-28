@@ -5,7 +5,7 @@
  * move to public/photos/originals/ (kept in git so nothing is lost).
  *
  *   npm run photos                 # all new photos in public/photos
- *   npm run photos -- --square a.jpg b.jpg   # also center-crop these to 1:1 (coach headshots)
+ *   npm run photos -- --square a.jpg b.jpg   # also center-crop these to 1:1 (team headshots)
  */
 import { readdir, mkdir, rename, stat } from 'node:fs/promises';
 import { join, extname, basename } from 'node:path';

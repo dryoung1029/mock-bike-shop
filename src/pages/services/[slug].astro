@@ -3,62 +3,52 @@ import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import FaqList from '../../components/FaqList.astro';
-import { getPrograms, type Program } from '../../lib/content';
+import { getServices, type Service } from '../../lib/content';
 import { crumbs, faqJsonLd } from '../../lib/seo';
-import { site } from '../../../site.config';
+import { site, bookingHref } from '../../../site.config';
 import { pack } from '../../lib/pack';
 
 export async function getStaticPaths() {
-  const programs = await getPrograms();
-  return programs.map((program) => ({ params: { slug: program.id }, props: { program } }));
+  const services = await getServices();
+  return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
 }
 
-const { program } = Astro.props as { program: Program };
-const d = program.data;
-const { Content } = await render(program);
-
-function signupHref(): string {
-  if (d.signupUrl) return d.signupUrl;
-  if (d.signupPlanKey) {
-    const url = (site.pushpress.plans as Record<string, string>)[d.signupPlanKey];
-    if (url) return url;
-  }
-  return '/contact/';
-}
+const { service } = Astro.props as { service: Service };
+const d = service.data;
+const { Content } = await render(service);
 
 const items = [
-  { name: 'Programs', url: '/programs/' },
-  { name: d.name, url: `/programs/${program.id}/` },
+  { name: 'Services', url: '/services/' },
+  { name: d.name, url: `/services/${service.id}/` },
 ];
 const faqs = d.faqs.map((f) => ({ question: f.q, answer: f.a }));
 const serviceNode = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   name: d.name,
-  serviceType: 'Fitness training',
+  serviceType: 'Bicycle repair',
   description: d.seoDescription ?? d.tagline,
   provider: { '@id': `${pack.brand.siteUrl}/#organization` },
-  areaServed: 'Corvallis, OR',
-  url: `${pack.brand.siteUrl}/programs/${program.id}/`,
+  areaServed: `${site.address.city}, ${site.address.region}`,
+  url: `${pack.brand.siteUrl}/services/${service.id}/`,
   ...(d.price ? { offers: { '@type': 'Offer', priceCurrency: 'USD', description: d.price } } : {}),
 };
 const jsonLd = [crumbs(items), serviceNode, faqJsonLd(faqs)].filter(Boolean) as Record<string, unknown>[];
 ---
 
-<BaseLayout title={d.seoTitle ?? `${d.name} in Corvallis, OR`} description={d.seoDescription ?? d.tagline} jsonLd={jsonLd}>
+<BaseLayout title={d.seoTitle ? `${d.seoTitle} in ${site.address.city}, ${site.address.region}` : `${d.name} in ${site.address.city}, ${site.address.region}`} description={d.seoDescription ?? d.tagline} jsonLd={jsonLd}>
   <div class="container">
     <Breadcrumbs items={items} />
     <header class="program-head">
       <h1>{d.name}</h1>
       <p class="lede">{d.tagline}</p>
       <dl class="facts">
-        <div><dt>Who it's for</dt><dd>{d.audience}</dd></div>
-        {d.format && <div><dt>Format</dt><dd>{d.format}</dd></div>}
-        {d.duration && <div><dt>Length</dt><dd>{d.duration}</dd></div>}
+        <div><dt>Good for</dt><dd>{d.audience}</dd></div>
+        {d.turnaround && <div><dt>Turnaround</dt><dd>{d.turnaround}</dd></div>}
         {d.price && <div><dt>Price</dt><dd>{d.price}</dd></div>}
       </dl>
       <div class="btn-row">
-        <a class="btn btn--primary btn--lg" href={signupHref()}>{d.signupLabel}</a>
+        <a class="btn btn--primary btn--lg" href={bookingHref()}>{d.bookingLabel}</a>
         <a class="btn btn--ghost" href="/contact/">Ask a question</a>
       </div>
     </header>
@@ -76,7 +66,7 @@ const jsonLd = [crumbs(items), serviceNode, faqJsonLd(faqs)].filter(Boolean) as 
         )}
         <div class="notice" style="margin-top: var(--s1)">
           <strong>Where:</strong> {site.address.street}, {site.address.city}. {site.address.landmark}.<br />
-          <a href="/schedule/">See the class schedule</a>
+          <a href="/pricing/">See the full price list</a>
         </div>
       </aside>
     </div>

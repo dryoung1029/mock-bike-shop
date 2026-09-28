@@ -5,6 +5,7 @@ interface Props {
 }
 const { hideCta = false } = Astro.props;
 const year = new Date().getFullYear();
+const socialLabels: Record<string, string> = { tiktok: 'TikTok', youtube: 'YouTube' };
 const socials = Object.entries(site.social).filter(([, url]) => url) as [string, string][];
 const days = Object.entries(site.hours) as [string, string][];
 ---
@@ -12,12 +13,12 @@ const days = Object.entries(site.hours) as [string, string][];
 {!hideCta && (
   <section class="section section--dark">
     <div class="container center">
-      <h2>Your first class is free.</h2>
+      <h2>Bike making a funny noise?</h2>
       <p class="lede" style="color: var(--fg-on-dark)">
-        Meet a coach, see the gym, do a workout you can walk out of feeling good about. No sales pitch.
+        Bring it in. We'll tell you what it needs and what it costs before we touch a thing.
       </p>
       <div class="btn-row" style="justify-content:center">
-        <a class="btn btn--primary btn--lg" href={site.primaryCta.href}>Book your free class</a>
+        <a class="btn btn--primary btn--lg" href={site.primaryCta.href}>{site.primaryCta.label}</a>
         <a class="btn btn--ghost" href="/contact/">Ask a question first</a>
       </div>
     </div>
@@ -27,13 +28,13 @@ const days = Object.entries(site.hours) as [string, string][];
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <img src="/brand/logo-horizontal.webp" alt={site.name} width="180" height="73" class="footer-logo" />
+      <img src="/brand/logo.svg" alt={site.name} width="180" height="49" class="footer-logo" />
       <p class="muted">{site.shortPitch}</p>
       {socials.length > 0 && (
         <ul class="social">
           {socials.map(([name, url]) => (
             <li>
-              <a href={url} rel="me noopener" target="_blank">{name.charAt(0).toUpperCase() + name.slice(1)}</a>
+              <a href={url} rel="me noopener" target="_blank">{socialLabels[name] ?? name.charAt(0).toUpperCase() + name.slice(1)}</a>
             </li>
           ))}
         </ul>
@@ -46,7 +47,7 @@ const days = Object.entries(site.hours) as [string, string][];
         {site.address.street}<br />
         {site.address.city}, {site.address.region} {site.address.postalCode}<br />
         <span class="muted">{site.address.landmark}</span><br />
-        <a href={site.address.mapsUrl} target="_blank" rel="noopener">Get directions</a><br />
+        {site.address.mapsUrl && <><a href={site.address.mapsUrl} target="_blank" rel="noopener">Get directions</a><br /></>}
         <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a><br />
         <a href={`mailto:${site.email}`}>{site.email}</a>
       </address>
@@ -64,7 +65,7 @@ const days = Object.entries(site.hours) as [string, string][];
           ))}
         </ul>
       ) : (
-        <p class="muted"><a href="/schedule/">See the schedule</a> for class times.</p>
+        <p class="muted">Call <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a> for hours.</p>
       )}
     </div>
 
@@ -74,10 +75,8 @@ const days = Object.entries(site.hours) as [string, string][];
         {site.nav.map((item) => (
           <li><a href={item.href}>{item.label}</a></li>
         ))}
-        <li><a href="/free-class/">Free class</a></li>
-        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/book-service/">Book a service</a></li>
         <li><a href="/about/">About</a></li>
-        <li><a href="/members/">Current members</a></li>
       </ul>
     </div>
   </div>

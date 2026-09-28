@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 /**
  * Send a test message through the live contact form endpoint.
- *   node scripts/test-contact.mjs https://helix-training-site.<account>.workers.dev
- * Expect {"ok":true}. Then check the inbox and PushPress (People). Each run
- * creates a new test contact in PushPress — delete them afterwards.
+ *   node scripts/test-contact.mjs https://js-wheels-site.<account>.workers.dev
+ * Expect {"ok":true}. Then check the inbox set as LEAD_NOTIFY_TO.
  */
 const base = (process.argv[2] || '').replace(/\/$/, '');
 if (!base) {

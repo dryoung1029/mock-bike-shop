@@ -1,9 +1,9 @@
 {
-  "name": "helix-training-site",
+  "name": "js-wheels-site",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Helix Training (Corvallis, OR) \u2014 fast, SEO/AEO-ready gym website built on Astro + Cloudflare Workers with the Jeldon content engine.",
+  "description": "J's Wheels (mock bike shop) — fast, SEO/AEO-ready bike shop website built on Astro + Cloudflare Workers with the Jeldon content engine.",
   "engines": {
     "node": ">=20"
   },

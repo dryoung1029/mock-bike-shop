@@ -3,7 +3,7 @@
 // then `npm run deploy:cf` on every push to main.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "helix-training-site",
+  "name": "js-wheels-site",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat"],
   "main": "./dist/_worker.js/index.js",
@@ -13,8 +13,8 @@
     "not_found_handling": "404-page"
   },
   "observability": { "enabled": true }
-  // Secrets (PUSHPRESS_API_KEY, PUSHPRESS_COMPANY_ID, BREVO_API_KEY,
-  // TURNSTILE_SECRET_KEY) are NOT here. They are set in the Cloudflare
-  // dashboard: Workers & Pages → helix-training-site → Settings → Variables
-  // and Secrets. The /setup wizard walks the owner through it.
+  // Secrets (BREVO_API_KEY, TURNSTILE_SECRET_KEY) and the plain variables
+  // LEAD_NOTIFY_TO / LEAD_NOTIFY_FROM are NOT here. They are set in the
+  // Cloudflare dashboard: Workers & Pages → js-wheels-site → Settings →
+  // Variables and Secrets. The /setup wizard walks the owner through it.
 }

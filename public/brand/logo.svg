@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 120" width="440" height="120" role="img" aria-label="J's Wheels">
+  <!-- SAMPLE: placeholder wordmark for the demo site. Replace with the shop's real logo (SVG or transparent PNG), then run `npm run icons`. -->
+  <g transform="translate(60 60)" fill="none" stroke-linecap="round">
+    <circle r="44" stroke="#1f6feb" stroke-width="9"/>
+    <circle r="7" fill="#f25c05" stroke="none"/>
+    <g stroke="#1f6feb" stroke-width="3">
+      <line x1="0" y1="-38" x2="0" y2="38"/>
+      <line x1="-38" y1="0" x2="38" y2="0"/>
+      <line x1="-27" y1="-27" x2="27" y2="27"/>
+      <line x1="-27" y1="27" x2="27" y2="-27"/>
+    </g>
+  </g>
+  <text x="122" y="80" font-family="Nunito, 'Arial Rounded MT Bold', 'Helvetica Neue', Arial, sans-serif" font-size="58" font-weight="800" fill="#22262b">J<tspan fill="#f25c05">’</tspan>s Wheels</text>
+</svg>

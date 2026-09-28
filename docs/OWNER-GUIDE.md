@@ -7,30 +7,44 @@ You never need to open these files yourself.
 
 | Page | Address | What's on it |
 |---|---|---|
-| Home | `/` | The big pitch, the three reasons, the program list, how to start, reviews, FAQ, map |
-| Programs | `/programs/` | The five programs. Each has its own page under `/programs/...` |
-| Schedule | `/schedule/` | This week's classes (from PushPress) and the booking calendar |
-| Pricing | `/pricing/` | Memberships, punch cards, drop-in, with Sign up buttons |
-| Coaches | `/coaches/` | Everyone on the team with a bio and photo |
+| Home | `/` | The big pitch, what we fix, how booking works, FAQ, map |
+| Services | `/services/` | The six services. Each has its own page under `/services/...` (tune-ups, flat tire repair, overhauls, wheel truing, bike fitting, e-bike service) |
+| Pricing | `/pricing/` | The repair price list |
+| Book a Service | `/book-service/` | The page everything points to. How drop-off and booking work + the "Book a Service" button |
+| Team | `/team/` | Everyone in the shop with a bio and photo |
 | Blog | `/blog/` | Articles. Only published ones show |
-| Free class | `/free-class/` | The page everything points to. How the free class works + the booking button |
 | Contact | `/contact/` | The form, phone, email, map |
-| FAQ, About, Members | `/faq/`, `/about/`, `/members/` | Questions, the story, links for current members |
+| FAQ, About | `/faq/`, `/about/` | Questions, the shop's story |
+| Privacy, Terms | `/privacy/`, `/terms/` | The fine print |
+
+There's also `/thanks/` (shown after someone sends the form), a "page not
+found" page, and `/llms.txt` (a short summary of the shop for AI tools).
 
 ## Where the facts live
 
-- **Hours, phone, email, prices, sign-up links, social links** → one file,
-  `site.config.ts`. Say "change Saturday hours to 8–11" and Claude edits it.
-- **Program descriptions** → one file per program in `src/content/programs/`.
-- **Coach bios** → one file per coach in `src/content/coaches/`.
+- **Hours, phone, email, address, repair prices, booking link, social links**
+  → one file, `site.config.ts`. Say "change Saturday hours to 9–3" and Claude
+  edits it.
+- **Service descriptions** (what's included, price, turnaround time, FAQs) →
+  one file per service in `src/content/services/`.
+- **Team bios** → one file per person in `src/content/team/`.
 - **FAQ questions** → `src/content/faqs.json`.
 - **Blog articles** → one file per article in `src/content/articles/`.
   An article with `draft: true` is invisible to visitors.
 - **Photos** → type `/photos`. Claude gives you one link; you pick photos from
   your phone or computer, tap Commit, say "done". Claude shrinks them, writes
   the descriptions, and puts them on the right pages.
+- **Logo** → `public/brand/logo.svg`. Claude rebuilds the little browser icon
+  and the share picture from it whenever it changes.
 - **Who you are, how you write, what the articles should sound like** →
   `jeldon.config.ts`. Claude fills this in during `/setup`.
+
+## Sample data
+
+Right now most business facts are made up so the demo looks real: the address
+(214 Spoke Street, Anytown), the phone (555) 010-0142, the prices, the hours,
+and the team. Each one is marked `SAMPLE:`. Things you still need to decide
+are marked `SETUP:`. Ask Claude "what's still sample?" any time.
 
 ## How a change goes live
 
@@ -51,16 +65,16 @@ When Claude writes an article it reports two numbers:
   level. Google basics.
 - **AI-citation readiness (GEO)** — does the article have the things AI
   answer engines (ChatGPT, Perplexity, Google's AI answers) tend to quote:
-  real statistics, a source you can click, a coach's first-person experience,
-  headings phrased as questions. Each article has a target (70–85 depending on the
+  real facts, a source you can click, a mechanic's first-person experience,
+  headings phrased as questions. Each article has a target (70–80 depending on the
   type). Below target, Claude improves it; but your voice always wins over the number.
 
 ## Things that need you
 
 - Approving every article before it goes live (`/publish`).
-- Confirming any business fact (hours, prices, dates).
-- Clicking around in Cloudflare, Brevo, PushPress when Claude asks.
-- The domain switch, with Jason.
+- Confirming any business fact (hours, prices, turnaround times, who's on the team).
+- Clicking around in Cloudflare and Brevo when Claude asks.
+- The domain switch, with a helper on the call.
 
 ## Things you never have to do
 

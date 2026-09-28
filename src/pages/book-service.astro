@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import FaqList from '../components/FaqList.astro';
+import { site, bookingHref } from '../../site.config';
+import { getFaqsFor } from '../lib/content';
+import { crumbs, faqJsonLd } from '../lib/seo';
+
+const faqs = await getFaqsFor('book-service');
+const items = [{ name: 'Book a service', url: '/book-service/' }];
+const jsonLd = [crumbs(items), faqJsonLd(faqs.map((f) => f.data))].filter(Boolean) as Record<string, unknown>[];
+const days = Object.entries(site.hours) as [string, string][];
+---
+
+<BaseLayout
+  title="Book a Bike Service"
+  description={`Book a tune-up, repair, fitting, or e-bike service at ${site.name} in ${site.address.city}. Walk-ins welcome; book ahead for a firm pickup day.`}
+  jsonLd={jsonLd}
+  hideFooterCta
+>
+  <div class="container">
+    <Breadcrumbs items={items} />
+    <div class="split" style="padding-block: var(--s2)">
+      <div>
+        <h1>Book a service</h1>
+        <p class="lede">Walk-ins are always welcome. Booking ahead gets you a firm pickup day, which helps during the spring rush.</p>
+        <ol class="how">
+          <li><strong>Tell us what's going on.</strong> Send a message or just show up. Noises, feelings, and "it seems off" all count.</li>
+          <li><strong>Drop off the bike.</strong> We look it over with you and write up an estimate and a pickup day.</li>
+          <li><strong>We call before extras.</strong> If we find anything else, you get a price first. Nothing is added without your yes.</li>
+          <li><strong>Pick it up.</strong> We tell you when it's ready and walk you through what we did.</li>
+        </ol>
+        <div class="btn-row">
+          <a class="btn btn--primary btn--lg" href={bookingHref()}>{site.booking.url ? 'Book online' : 'Request a booking'}</a>
+          <a class="btn btn--ghost" href={`tel:${site.phone}`}>Call {site.phoneDisplay}</a>
+        </div>
+        <p class="muted" style="margin-top: var(--s0); font-size: var(--step--1)">Bike fittings are by appointment only. Flat fixes are usually done while you wait — no booking needed.</p>
+      </div>
+      <div>
+        <h2 style="font-size: var(--step-1)">Before you come</h2>
+        <FaqList faqs={faqs} />
+        <div class="notice" style="margin-top: var(--s1)">
+          <strong>{site.address.street}, {site.address.city}</strong><br />
+          {site.address.landmark}.
+          {site.address.mapsUrl && <> <a href={site.address.mapsUrl} target="_blank" rel="noopener">Get directions</a></>}
+          {site.hoursConfirmed && (
+            <ul class="hours">
+              {days.map(([day, h]) => (
+                <li><span>{day}</span><span>{h || 'Closed'}</span></li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .how {
+    padding-left: 1.3em;
+    margin: var(--s0) 0 var(--s1);
+    max-width: var(--measure);
+  }
+  .how li + li {
+    margin-top: 0.4em;
+  }
+  .hours {
+    list-style: none;
+    padding: 0;
+    margin: var(--s0) 0 0;
+  }
+  .hours li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s0);
+    padding: 0.1em 0;
+  }
+</style>

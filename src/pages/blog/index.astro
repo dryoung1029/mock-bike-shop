@@ -5,19 +5,20 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getPublishedArticles, formatDate, estimateReadTime } from '../../lib/content';
 import { categoryLabel } from '../../lib/pack';
 import { crumbs } from '../../lib/seo';
+import { site } from '../../../site.config';
 
 const articles = await getPublishedArticles();
 const items = [{ name: 'Blog', url: '/blog/' }];
 ---
 
 <BaseLayout
-  title="Blog — Strength Training Advice from Corvallis Coaches"
-  description="Plain-language answers from the Helix Training coaches: strength training after 50, getting started, recovery, nutrition, and staying consistent. Written by a Doctor of Physical Therapy and her team."
+  title="Blog — Bike Maintenance Advice from the Repair Stand"
+  description={`Plain-language answers from the mechanics at ${site.name}: tune-ups, flats, chains, brakes, e-bikes, bike fit, and choosing a bike.`}
   jsonLd={[crumbs(items)]}
 >
   <div class="container">
     <Breadcrumbs items={items} />
-    <PageHeader title="From the coaches" lede="The questions we hear on the gym floor, answered properly — with sources." />
+    <PageHeader title="From the repair stand" lede="The questions we hear across the counter, answered properly — with sources where it matters." />
     {articles.length === 0 ? (
       <div class="notice">
         <p><strong>First articles are on the way.</strong> In the meantime, <a href="/faq/">the FAQ</a> answers the most common questions.</p>

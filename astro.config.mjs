@@ -45,7 +45,7 @@ export default defineConfig({
     sitemap({
       filter: (page) =>
         sitemapFilter(excluded)(page) &&
-        !['/api/', '/thanks/', '/members/', '/privacy/', '/terms/'].some((p) => page.includes(p)),
+        !['/api/', '/thanks/', '/privacy/', '/terms/'].some((p) => page.includes(p)),
     }),
   ],
   // The site doesn't use sessions. Without this the Cloudflare adapter wires a
